@@ -6,6 +6,10 @@ interface ACMEINFO{
     accountEmail:string
     commonName:string
     altNames:string[]
+    tencent:{
+        secretId:string
+        secretKey:string
+    }
 }
 
 class ConfigManager<T> {
@@ -27,7 +31,7 @@ class ConfigManager<T> {
   }
 
   // 异步地保存配置文件
-  public saveConfig(configObject: T, callback: (err?: NodeJS.ErrnoException) => void): void {
+  public saveConfig(configObject: T, callback?: (err?: NodeJS.ErrnoException) => void): void {
     const data = JSON.stringify(configObject, null, 2); // 格式化为美观的JSON
     fs.writeFileSync(this.configPath, data, { encoding: 'utf8' });
   }

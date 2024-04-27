@@ -1,12 +1,13 @@
 import * as acme from "acme-client";
 import { challengeCreateFn, challengeRemoveFn } from "./challenge";
 import { configSave } from "./save";
+import { dnspodclient } from "./tencent";
 
 async function main() {
     acme.setLogger(console.log);
     const config=await configSave.readConfigSync();
     if(!config||!config.accountKey){
-         configSave.saveConfig({accountKey:((await acme.crypto.createPrivateKey()).toString('utf8')),accountEmail:'abc@gmail.com',commonName:'abc.com',altNames:['abc.com','*.abc.com']},()=>{});
+         configSave.saveConfig({accountKey:((await acme.crypto.createPrivateKey()).toString('utf8')),accountEmail:'abc@gmail.com',commonName:'abc.com',altNames:['abc.com','*.abc.com'],...config},()=>{});
          throw new Error('请配置config.evn文件');
     }
     /* Init client */
@@ -35,8 +36,12 @@ async function main() {
     console.log(`Private key:\n${key.toString()}`);
     console.log(`Certificate:\n${cert.toString()}`);
 }
-main();
-
+async function test(){
+    dnspodclient.DescribeDomainList({}).then((val)=>{
+        console.log(val);
+    })
+}
+test()
 
 
 
